@@ -1,6 +1,8 @@
 export function getSupabasePublicConfig() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const legacyAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const anonKey = publishableKey ?? legacyAnonKey;
 
   return {
     url,
