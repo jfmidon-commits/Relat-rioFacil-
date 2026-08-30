@@ -1,0 +1,154 @@
+.dashboardFive {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.dashboardNotice {
+  margin-bottom: 20px;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px;
+}
+
+.emptyState h2 {
+  margin: 0 0 8px;
+}
+
+.emptyState p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.emptyStateIcon {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: var(--accent);
+  color: var(--brand);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.panelHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.panelHeading h2 {
+  margin-bottom: 5px;
+}
+
+.panelHeading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.visitList {
+  display: grid;
+}
+
+.visitRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.visitMain {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.visitMain strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.visitMain span,
+.visitMeta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.visitMeta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--brand-strong);
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.emptyInline {
+  display: grid;
+  gap: 6px;
+  padding: 22px 0 4px;
+  border-top: 1px solid var(--line);
+}
+
+.emptyInline span {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.tenantStatus {
+  margin-top: 16px;
+}
+
+@media (max-width: 1050px) {
+  .dashboardFive {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .dashboardFive {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .visitRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .visitMeta {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .dashboardFive {
+    grid-template-columns: 1fr;
+  }
+
+  .emptyState {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
