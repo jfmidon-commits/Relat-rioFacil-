@@ -189,8 +189,22 @@ export async function getReportHistory(filters: HistoryFilters): Promise<History
   }
 
   const validStatuses = new Set(["pending", "generated", "sent", "error"]);
+  const selectedStore = scope.stores.find((store) => store.id === filters.store);
   const from = startOfBrazilDay(filters.from);
   const to = endOfBrazilDay(filters.to);
+  let visitIdsForStore: string[] | null = null;
+
+  if (selectedStore) {
+    const { data: storeVisits, error: storeVisitsError } = await supabase
+      .from("visits")
+      .select("id")
+      .eq("client_id", scope.selectedClient.id)
+      .eq("store_id", selectedStore.id);
+
+    if (storeVisitsError) return { ...scope, reports: [], hasError: true };
+    visitIdsForStore = (storeVisits ?? []).map((visit) => visit.id);
+    if (!visitIdsForStore.length) return { ...scope, reports: [] };
+  }
 
   let query = supabase
     .from("reports")
@@ -199,6 +213,7 @@ export async function getReportHistory(filters: HistoryFilters): Promise<History
     .order("created_at", { ascending: false })
     .limit(100);
 
+  if (visitIdsForStore) query = query.in("visit_id", visitIdsForStore);
   if (filters.status && validStatuses.has(filters.status)) query = query.eq("status", filters.status);
   if (from) query = query.gte("created_at", from);
   if (to) query = query.lte("created_at", to);
