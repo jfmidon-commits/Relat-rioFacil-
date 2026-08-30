@@ -42,6 +42,7 @@ export default async function AppHomePage() {
           <nav className="navlinks" aria-label="Navegação operacional">
             <a href="/app/clientes">Clientes</a>
             <a href="/app/lojas">Lojas</a>
+            <a href="/app/visitas">Visitas</a>
             <a href="/app/relatorios">Relatórios</a>
             <a className="button primary" href={auditFormUrl} target="_blank" rel="noreferrer">Nova auditoria</a>
             <LogoutButton />
@@ -64,6 +65,7 @@ export default async function AppHomePage() {
             <a className="button primary" href={auditFormUrl} target="_blank" rel="noreferrer">Nova visita</a>
             <a className="button" href="/app/clientes">Clientes</a>
             <a className="button" href="/app/lojas">Lojas</a>
+            <a className="button" href="/app/visitas">Visitas</a>
             <a className="button" href="/app/relatorios">Relatórios</a>
           </div>
         </div>
@@ -106,6 +108,7 @@ export default async function AppHomePage() {
                   <h2>Visitas recentes</h2>
                   <p>Últimas avaliações disponíveis para o cliente autenticado.</p>
                 </div>
+                <a className="button" href="/app/visitas">Ver histórico</a>
               </div>
 
               {dashboard.recentVisits.length ? (
