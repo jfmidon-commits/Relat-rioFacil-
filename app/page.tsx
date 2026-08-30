@@ -9,7 +9,7 @@ export default function HomePage() {
           <nav className="navlinks" aria-label="Navegação principal">
             <a href="#como-funciona">Como funciona</a>
             <a href="#beneficios">Benefícios</a>
-            <a className="button" href="/operacao">Área operacional</a>
+            <a className="button" href="/login">Área do cliente</a>
           </nav>
         </div>
       </header>
@@ -27,7 +27,7 @@ export default function HomePage() {
               <a className="button primary" href={auditFormUrl} target="_blank" rel="noreferrer">
                 Iniciar auditoria
               </a>
-              <a className="button" href="/operacao">Ver operação</a>
+              <a className="button" href="/login">Entrar na área segura</a>
             </div>
           </div>
 
