@@ -1,11 +1,18 @@
 import LogoutButton from "@/components/logout-button";
-import { getReportHistory } from "@/lib/services/history";
+import { getVisitHistory } from "@/lib/services/history";
 import styles from "../manage.module.css";
 
+const classificationLabels: Record<string, string> = {
+  excellent: "Excelente",
+  good: "Bom",
+  attention: "Atenção",
+  critical: "Crítico",
+};
+
 const statusLabels: Record<string, string> = {
-  pending: "Pendente",
-  generated: "Gerado",
-  sent: "Enviado",
+  submitted: "Enviada",
+  processing: "Processando",
+  completed: "Concluída",
   error: "Erro",
 };
 
@@ -19,20 +26,20 @@ type PageProps = {
   searchParams: Promise<{ client?: string; store?: string; status?: string; from?: string; to?: string }>;
 };
 
-export default async function AppRelatoriosPage({ searchParams }: PageProps) {
+export default async function VisitasPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const data = await getReportHistory(params);
+  const data = await getVisitHistory(params);
 
   return (
     <main className="shell">
       <header className="topbar">
         <div className="container nav">
           <a className="brand" href="/app">Relatório<span>Fácil</span></a>
-          <nav className="navlinks" aria-label="Navegação de relatórios">
+          <nav className="navlinks" aria-label="Navegação de visitas">
             <a href="/app">Dashboard</a>
-            <a href="/app/visitas">Visitas</a>
             <a href="/app/clientes">Clientes</a>
             <a href="/app/lojas">Lojas</a>
+            <a href="/app/relatorios">Relatórios</a>
             <LogoutButton />
           </nav>
         </div>
@@ -42,23 +49,23 @@ export default async function AppRelatoriosPage({ searchParams }: PageProps) {
         <div className="app-header">
           <div>
             <div className="eyebrow">Histórico</div>
-            <h1>Relatórios</h1>
-            <p>Consulte PDFs e estados de processamento do tenant selecionado.</p>
+            <h1>Visitas</h1>
+            <p>Consulte as avaliações do tenant selecionado com filtros server-side.</p>
           </div>
           <div className={styles.toolbar}>
             <a className="button" href="/app">Dashboard</a>
-            <a className="button" href="/app/visitas">Visitas</a>
+            <a className="button" href="/app/relatorios">Relatórios</a>
           </div>
         </div>
 
         {data.hasError ? (
-          <div className="notice error" role="alert">Não foi possível carregar o histórico de relatórios.</div>
+          <div className="notice error" role="alert">Não foi possível carregar o histórico de visitas.</div>
         ) : null}
 
         {!data.clients.length ? (
           <section className="panel">
             <h2>Nenhum cliente disponível</h2>
-            <p className="section-lead">Crie o primeiro cliente antes de consultar relatórios no novo banco.</p>
+            <p className="section-lead">Crie um cliente e uma loja antes de registrar visitas no novo banco.</p>
             <a className="button primary" href="/app/clientes">Ir para Clientes</a>
           </section>
         ) : (
@@ -83,9 +90,9 @@ export default async function AppRelatoriosPage({ searchParams }: PageProps) {
                   Status
                   <select name="status" defaultValue={params.status ?? ""}>
                     <option value="">Todos</option>
-                    <option value="pending">Pendente</option>
-                    <option value="generated">Gerado</option>
-                    <option value="sent">Enviado</option>
+                    <option value="submitted">Enviada</option>
+                    <option value="processing">Processando</option>
+                    <option value="completed">Concluída</option>
                     <option value="error">Erro</option>
                   </select>
                 </label>
@@ -98,7 +105,7 @@ export default async function AppRelatoriosPage({ searchParams }: PageProps) {
                   <input type="date" name="to" defaultValue={params.to ?? ""} />
                 </label>
                 <div className={styles.formActions}>
-                  <a className="button" href="/app/relatorios">Limpar</a>
+                  <a className="button" href="/app/visitas">Limpar</a>
                   <button className="button primary" type="submit">Aplicar filtros</button>
                 </div>
               </form>
@@ -106,33 +113,32 @@ export default async function AppRelatoriosPage({ searchParams }: PageProps) {
 
             <section className="panel">
               <h2>Resultados · {data.selectedClient?.name}</h2>
-              {data.reports.length ? (
+              {data.visits.length ? (
                 <div className={styles.list}>
-                  {data.reports.map((report) => (
-                    <article className={styles.item} key={report.id}>
+                  {data.visits.map((visit) => (
+                    <article className={styles.item} key={visit.id}>
                       <div className={styles.itemHeader}>
                         <div>
-                          <strong>{report.storeName}</strong>
+                          <strong>{visit.storeName}</strong>
                           <div className={styles.meta}>
-                            <span>Relatório v{report.version}</span>
+                            <span>{dateFormatter.format(new Date(visit.occurredAt))}</span>
                             <span>•</span>
-                            <span>Criado em {dateFormatter.format(new Date(report.createdAt))}</span>
-                            {report.visitOccurredAt ? <><span>•</span><span>Visita em {dateFormatter.format(new Date(report.visitOccurredAt))}</span></> : null}
+                            <span>{visit.score === null ? "Sem nota" : `Nota ${visit.score.toFixed(1)}`}</span>
+                            <span>•</span>
+                            <span>{visit.nonconformities} não conformidade(s)</span>
                           </div>
                         </div>
-                        <div className={styles.toolbar}>
-                          <span className={styles.badge}>{statusLabels[report.status] ?? report.status}</span>
-                          {report.pdfUrl ? (
-                            <a className="button" href={report.pdfUrl} target="_blank" rel="noreferrer">Abrir PDF</a>
-                          ) : null}
+                        <div className={styles.meta}>
+                          <span className={styles.badge}>{classificationLabels[visit.classification ?? ""] ?? "Sem classificação"}</span>
+                          <span className={styles.badge}>{statusLabels[visit.status] ?? visit.status}</span>
                         </div>
                       </div>
-                      {report.sentAt ? <p className="section-lead">Enviado em {dateFormatter.format(new Date(report.sentAt))}</p> : null}
+                      {visit.notes ? <p className="section-lead">{visit.notes}</p> : null}
                     </article>
                   ))}
                 </div>
               ) : (
-                <p className={styles.empty}>Nenhum relatório encontrado com os filtros atuais.</p>
+                <p className={styles.empty}>Nenhuma visita encontrada com os filtros atuais.</p>
               )}
             </section>
           </div>
