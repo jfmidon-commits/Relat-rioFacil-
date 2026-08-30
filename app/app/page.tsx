@@ -65,12 +65,14 @@ export default async function AppHomePage() {
         </div>
 
         {dashboard.hasError ? (
-          <div className={`notice error ${styles.dashboardNotice}`} role="alert">
-            Não foi possível carregar os indicadores agora. Tente novamente em instantes.
-          </div>
-        ) : null}
-
-        {dashboard.needsOnboarding ? (
+          <section className={`panel ${styles.emptyState}`}>
+            <div className={styles.emptyStateIcon} aria-hidden="true">!</div>
+            <div>
+              <h2>Não foi possível carregar o dashboard</h2>
+              <p>Tente novamente em instantes. Nenhum valor foi exibido para evitar confundir falha de leitura com dados reais.</p>
+            </div>
+          </section>
+        ) : dashboard.needsOnboarding ? (
           <section className={`panel ${styles.emptyState}`}>
             <div className={styles.emptyStateIcon} aria-hidden="true">RF</div>
             <div>
