@@ -1,5 +1,6 @@
 import LogoutButton from "@/components/logout-button";
 import { getDashboardData } from "@/lib/services/dashboard";
+import styles from "./dashboard.module.css";
 
 const auditFormUrl = process.env.NEXT_PUBLIC_AUDIT_FORM_URL ?? "https://tally.so/r/0QRR4A";
 
@@ -64,14 +65,14 @@ export default async function AppHomePage() {
         </div>
 
         {dashboard.hasError ? (
-          <div className="notice error dashboard-notice" role="alert">
+          <div className={`notice error ${styles.dashboardNotice}`} role="alert">
             Não foi possível carregar os indicadores agora. Tente novamente em instantes.
           </div>
         ) : null}
 
         {dashboard.needsOnboarding ? (
-          <section className="panel empty-state">
-            <div className="empty-state-icon" aria-hidden="true">RF</div>
+          <section className={`panel ${styles.emptyState}`}>
+            <div className={styles.emptyStateIcon} aria-hidden="true">RF</div>
             <div>
               <h2>Seu ambiente está pronto para começar</h2>
               <p>
@@ -82,7 +83,7 @@ export default async function AppHomePage() {
           </section>
         ) : (
           <>
-            <div className="dashboard dashboard-five">
+            <div className={`dashboard ${styles.dashboardFive}`}>
               <div className="metric"><span>Total de visitas</span><strong>{metrics.totalVisits}</strong></div>
               <div className="metric"><span>Nota média</span><strong>{metrics.averageScore === null ? "—" : metrics.averageScore.toFixed(1)}</strong></div>
               <div className="metric"><span>Não conformidades</span><strong>{metrics.nonconformities}</strong></div>
@@ -91,7 +92,7 @@ export default async function AppHomePage() {
             </div>
 
             <section className="panel">
-              <div className="panel-heading">
+              <div className={styles.panelHeading}>
                 <div>
                   <h2>Visitas recentes</h2>
                   <p>Últimas avaliações disponíveis para o cliente autenticado.</p>
@@ -99,15 +100,15 @@ export default async function AppHomePage() {
               </div>
 
               {dashboard.recentVisits.length ? (
-                <div className="visit-list">
+                <div className={styles.visitList}>
                   {dashboard.recentVisits.map((visit) => (
-                    <article className="visit-row" key={visit.id}>
-                      <div className="visit-main">
+                    <article className={styles.visitRow} key={visit.id}>
+                      <div className={styles.visitMain}>
                         <strong>{visit.storeName}</strong>
                         <span>{dateFormatter.format(new Date(visit.occurredAt))}</span>
                       </div>
-                      <div className="visit-meta">
-                        <span className="badge">{classificationLabels[visit.classification ?? ""] ?? "Sem classificação"}</span>
+                      <div className={styles.visitMeta}>
+                        <span className={styles.badge}>{classificationLabels[visit.classification ?? ""] ?? "Sem classificação"}</span>
                         <span>{visit.score === null ? "Sem nota" : `Nota ${visit.score.toFixed(1)}`}</span>
                         <span>{statusLabels[visit.status] ?? visit.status}</span>
                       </div>
@@ -115,14 +116,14 @@ export default async function AppHomePage() {
                   ))}
                 </div>
               ) : (
-                <div className="empty-inline">
+                <div className={styles.emptyInline}>
                   <strong>Nenhuma visita registrada ainda.</strong>
                   <span>Faça a primeira auditoria para começar a alimentar o dashboard.</span>
                 </div>
               )}
             </section>
 
-            <section className="panel tenant-status">
+            <section className={`panel ${styles.tenantStatus}`}>
               <h2>Ambiente</h2>
               <div className="status-row"><span>Cliente</span><span className="status-ok">{dashboard.client?.name}</span></div>
               <div className="status-row"><span>Status</span><span className="status-ok">{dashboard.client?.status === "active" ? "Ativo" : "Pausado"}</span></div>
