@@ -12,9 +12,12 @@ export default function LoginPage() {
         <div className="eyebrow">Área segura</div>
         <h1 id="login-title">Entrar no RelatórioFácil</h1>
         <p className="auth-lead">
-          Acesse a operação, os relatórios e, nas próximas etapas, os dados isolados da sua empresa.
+          Acesse a operação, clientes, lojas, visitas e relatórios do seu ambiente.
         </p>
         <LoginForm />
+        <p className="auth-back">
+          Ainda não tem conta? <a href="/cadastro"><strong>Criar conta</strong></a>
+        </p>
         <a className="auth-back" href="/">← Voltar para o início</a>
       </section>
     </main>
