@@ -10,20 +10,24 @@ Tally → Airtable → cálculo da nota → Google Docs → fotos → PDF → Go
 
 Este repositório contém a camada web do produto e é separado dos demais projetos.
 
-A primeira versão web inclui:
+A camada web inclui:
 
 - landing page responsiva;
-- área operacional;
-- base da área de relatórios;
+- área operacional autenticada em `/app`;
+- página de login em `/login`;
+- Supabase Auth preparado com `@supabase/ssr`;
+- sessão renovada por middleware e validada novamente no servidor;
+- base da área de relatórios protegida;
 - acesso ao formulário de auditoria;
 - configuração por variáveis de ambiente;
 - CI com typecheck e build.
 
 ## Stack
 
-- Next.js
-- React
+- Next.js 15
+- React 19
 - TypeScript
+- Supabase Auth
 - CSS nativo
 
 ## Rodar localmente
@@ -33,12 +37,26 @@ npm install
 npm run dev
 ```
 
-Copie `.env.example` para `.env.local` quando precisar configurar links ou integrações locais.
+Copie `.env.example` para `.env.local` e configure, no mínimo:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+```
+
+A `anon key`/publishable key é própria para uso no cliente. Nunca use `service_role` no navegador ou em variável `NEXT_PUBLIC_*`.
+
+Sem as variáveis reais do Supabase, o projeto continua compilando e a tela de login informa que a autenticação ainda não está conectada; o login/logout em runtime só pode ser validado depois que um projeto Supabase real for configurado.
 
 ## Segurança
 
-Nenhuma credencial deve ser commitada. Tokens do Airtable, Google ou outros serviços devem existir somente no ambiente do servidor/deploy. Variáveis prefixadas com `NEXT_PUBLIC_` devem conter apenas informações que podem aparecer no navegador.
+Nenhuma credencial real deve ser commitada. Tokens do Airtable, Google ou outros serviços devem existir somente no ambiente do servidor/deploy. Variáveis prefixadas com `NEXT_PUBLIC_` devem conter apenas informações que podem aparecer no navegador.
+
+A proteção de `/app` ocorre em duas camadas:
+
+1. middleware para renovação de sessão e redirecionamento;
+2. validação server-side no layout protegido usando `auth.getUser()`.
 
 ## Direção do produto
 
-A evolução web deve substituir gradualmente a dependência visual de Tally/Airtable sem interromper o motor operacional já validado. As próximas etapas são autenticação e isolamento por cliente, gestão de clientes/lojas dentro do app, histórico conectado ao backend, download/reenvio de PDFs e migração progressiva das automações para APIs próprias.
+A próxima etapa é a fundação multi-tenant com `auth.users`, `profiles`, `clients`, `client_memberships`, `stores`, `visits` e `reports`, com RLS baseado em `auth.uid()` e membership válida. Depois disso entram dashboard com dados reais, clientes/lojas e integração gradual com o motor operacional existente.
