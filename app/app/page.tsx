@@ -40,6 +40,8 @@ export default async function AppHomePage() {
         <div className="container nav">
           <a className="brand" href="/app">Relatório<span>Fácil</span></a>
           <nav className="navlinks" aria-label="Navegação operacional">
+            <a href="/app/clientes">Clientes</a>
+            <a href="/app/lojas">Lojas</a>
             <a href="/app/relatorios">Relatórios</a>
             <a className="button primary" href={auditFormUrl} target="_blank" rel="noreferrer">Nova auditoria</a>
             <LogoutButton />
@@ -60,6 +62,8 @@ export default async function AppHomePage() {
           </div>
           <div className="actions">
             <a className="button primary" href={auditFormUrl} target="_blank" rel="noreferrer">Nova visita</a>
+            <a className="button" href="/app/clientes">Clientes</a>
+            <a className="button" href="/app/lojas">Lojas</a>
             <a className="button" href="/app/relatorios">Relatórios</a>
           </div>
         </div>
@@ -78,9 +82,12 @@ export default async function AppHomePage() {
             <div>
               <h2>Seu ambiente está pronto para começar</h2>
               <p>
-                Sua conta ainda não está vinculada a um cliente. Quando o primeiro cliente for criado,
-                este painel passará a mostrar visitas, notas, não conformidades e relatórios reais.
+                Sua conta ainda não está vinculada a um cliente. Crie o primeiro cliente para habilitar lojas,
+                visitas, notas, não conformidades e relatórios reais.
               </p>
+              <div className="actions">
+                <a className="button primary" href="/app/clientes">Criar primeiro cliente</a>
+              </div>
             </div>
           </section>
         ) : (
