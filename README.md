@@ -1,32 +1,44 @@
 # RelatórioFácil
 
-MVP web do RelatórioFácil — auditorias de campo com checklist, fotos, nota automática, geração de PDF e envio de relatório.
+MVP web do RelatórioFácil — auditorias de campo com checklist, fotos, nota automática, geração de PDF e envio controlado de relatório.
 
 ## Estado atual
 
-O motor operacional já foi validado ponta a ponta:
+O motor operacional foi validado ponta a ponta:
 
 Tally → Airtable → cálculo da nota → Google Docs → fotos → PDF → Google Drive → Gmail → atualização do Airtable.
 
-Este repositório contém a camada web do produto, separada dos demais projetos.
+Este repositório contém a camada web do produto e é separado dos demais projetos.
 
-## Stack inicial
+A primeira versão web inclui:
+
+- landing page responsiva;
+- área operacional;
+- base da área de relatórios;
+- acesso ao formulário de auditoria;
+- configuração por variáveis de ambiente;
+- CI com typecheck e build.
+
+## Stack
 
 - Next.js
+- React
 - TypeScript
 - CSS nativo
-- Integrações de produção via variáveis de ambiente no servidor
+
+## Rodar localmente
+
+```bash
+npm install
+npm run dev
+```
+
+Copie `.env.example` para `.env.local` quando precisar configurar links ou integrações locais.
 
 ## Segurança
 
-Nenhuma credencial deve ser commitada. Use `.env.local` localmente e variáveis protegidas no ambiente de deploy.
+Nenhuma credencial deve ser commitada. Tokens do Airtable, Google ou outros serviços devem existir somente no ambiente do servidor/deploy. Variáveis prefixadas com `NEXT_PUBLIC_` devem conter apenas informações que podem aparecer no navegador.
 
-## Próximas etapas
+## Direção do produto
 
-1. Entrada web profissional
-2. Área operacional
-3. Clientes e lojas
-4. Histórico de visitas
-5. Visualização/download de PDFs
-6. Autenticação e isolamento por cliente
-7. Migração gradual das integrações de bastidores para APIs próprias
+A evolução web deve substituir gradualmente a dependência visual de Tally/Airtable sem interromper o motor operacional já validado. As próximas etapas são autenticação e isolamento por cliente, gestão de clientes/lojas dentro do app, histórico conectado ao backend, download/reenvio de PDFs e migração progressiva das automações para APIs próprias.
