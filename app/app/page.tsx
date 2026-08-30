@@ -44,6 +44,7 @@ export default async function AppHomePage() {
             <a href="/app/lojas">Lojas</a>
             <a href="/app/visitas">Visitas</a>
             <a href="/app/relatorios">Relatórios</a>
+            <a href="/app/importar">Importar</a>
             <a className="button primary" href={auditFormUrl} target="_blank" rel="noreferrer">Nova auditoria</a>
             <LogoutButton />
           </nav>
@@ -67,6 +68,7 @@ export default async function AppHomePage() {
             <a className="button" href="/app/lojas">Lojas</a>
             <a className="button" href="/app/visitas">Visitas</a>
             <a className="button" href="/app/relatorios">Relatórios</a>
+            <a className="button" href="/app/importar">Importar histórico</a>
           </div>
         </div>
 
@@ -130,7 +132,7 @@ export default async function AppHomePage() {
               ) : (
                 <div className={styles.emptyInline}>
                   <strong>Nenhuma visita registrada ainda.</strong>
-                  <span>Faça a primeira auditoria para começar a alimentar o dashboard.</span>
+                  <span>Faça a primeira auditoria ou importe o histórico concluído do motor atual.</span>
                 </div>
               )}
             </section>
@@ -140,6 +142,7 @@ export default async function AppHomePage() {
               <div className="status-row"><span>Cliente</span><span className="status-ok">{dashboard.client?.name}</span></div>
               <div className="status-row"><span>Status</span><span className="status-ok">{dashboard.client?.status === "active" ? "Ativo" : "Pausado"}</span></div>
               <div className="status-row"><span>Isolamento de dados</span><span className="status-ok">Multi-tenant ativo</span></div>
+              <div className="status-row"><span>Migração do histórico</span><a href="/app/importar"><strong>Abrir importador</strong></a></div>
             </section>
           </>
         )}
